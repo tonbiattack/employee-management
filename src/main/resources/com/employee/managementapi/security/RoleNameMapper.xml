@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.security.RoleNameMapper">
+	
+   <select id="countByRole" parameterType="com.employee.managementapi.security.RoleName" resultType="java.lang.Integer">
+  	SELECT
+    	COUNT( * )
+	FROM
+    	role
+	WHERE 
+    	role.role_name = #{roleName}
+  </select>
+  
+  <select id="selectRoleIdByRole" parameterType="com.employee.managementapi.security.RoleName" resultType="java.lang.Integer">
+    SELECT
+    	role_id
+	FROM
+    	role
+	WHERE 
+    	role.role_name = #{roleName}
+  </select>
+</mapper>

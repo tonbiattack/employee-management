@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.employee.managementapi.security.AccountMapper">
+    <resultMap id="accountMap" type="com.employee.managementapi.security.Account">
+        <id property="companyEmail" column="company_email"/>
+        <result property="password" column="password" />
+        <collection property="roleNameList" ofType="com.employee.managementapi.security.RoleName">
+        	 <id property="roleName"  column="role_name"/>
+        </collection>
+    </resultMap>
+<select id="selectByEmail" parameterType="java.lang.String" resultMap="accountMap">
+    SELECT
+    	ae.company_email,
+    	pass.password,
+    	role.role_name
+	FROM
+    	password AS pass
+	INNER JOIN
+    	active_employee_contact_information AS ae ON
+    	pass.active_employee_contact_information_id = ae.active_employee_contact_information_id    
+    INNER JOIN
+    	ownership as os ON
+    	pass.password_id = os.password_id
+    INNER JOIN 
+    	role ON
+    	os.role_id = role.role_id
+	WHERE 
+    	ae.company_email = #{companyEmail}
+</select>
+</mapper>

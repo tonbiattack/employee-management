@@ -1,0 +1,18 @@
+insert into programming_skill(programming_skill_id,programming_skill_name) values 
+ (1,'Java')
+,(2,'JavaScript')
+,(3,'C言語')
+,(4,'C#')
+,(5,'PHP')
+,(6,'Ruby')
+,(7,'Perl')
+,(8,'Swift')
+,(9,'R言語')
+,(10,'Python')
+,(11,'Scala')
+,(12,'TypeScript')
+,(13,'Kotlin')
+,(14,'GO')
+,(15,'VisualBasic.NET')
+,(16,'COBOL')
+;

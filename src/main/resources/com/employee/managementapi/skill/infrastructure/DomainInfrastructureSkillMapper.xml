@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.skill.infrastructure.DomainInfrastructureSkillMapper">
+	<select id="selectEmployeeIdListByFilterList"
+	  resultType="java.lang.Integer">
+  SELECT
+     emp.employee_id
+  FROM
+    employee_infrastructure_skill as emp_infra
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_infra.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+    AND
+    es.employee_status_id = 1
+  WHERE
+   <foreach item="domainInfrastructureSkill" collection="domainInfrastructureSkills"
+      separator="OR">
+          emp_infra.infrastructure_skill_id = #{domainInfrastructureSkill.infrastructureSkillId} AND emp_infra.skill_level <![CDATA[>=]]> #{domainInfrastructureSkill.skillLevel}
+  </foreach>
+  GROUP BY 
+   emp.employee_id 
+  HAVING
+   COUNT(*) = #{domainInfrastructureSkillsSize}
+  ORDER BY
+    emp.employee_id
+     </select>
+
+
+<select id="selectListByEnployeeIdList" parameterType="com.employee.managementapi.employee.EmployeeId" resultType="com.employee.managementapi.skill.infrastructure.InfrastructureSkill">
+  SELECT
+     infra_skill.infrastructure_skill_id
+    ,infra_skill.infrastructure_skill_name
+    ,emp_infra.skill_level
+  FROM
+    employee_infrastructure_skill as emp_infra
+  INNER JOIN
+    infrastructure_skill as infra_skill on 
+    infra_skill.infrastructure_skill_id = emp_infra.infrastructure_skill_id
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_infra.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+  AND
+    es.employee_status_id = 1
+  WHERE 
+    emp.employee_id 
+    IN
+    <foreach item="employeeId" open="(" close=")" collection="employeeIds" separator=",">
+      #{employeeId.employeeId}
+    </foreach>
+  ORDER BY
+    emp.employee_id, infra_skill.infrastructure_skill_id
+</select>
+</mapper>

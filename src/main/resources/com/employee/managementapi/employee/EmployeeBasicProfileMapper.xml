@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.employee.EmployeeBasicProfileMapper">
+	  <select id="selectLimit" resultType="com.employee.managementapi.employee.EmployeeBasicProfile">
+  SELECT
+    emp.employee_id
+  , emp.employee_code
+  , emp.family_name 
+  , emp.last_name 
+  , emp.family_name_furigana
+  , emp.last_name_furigana
+  FROM
+    employee as emp
+  INNER JOIN
+    employee_status as es on es.employee_status_id = emp.employee_status_id 
+  AND
+    es.employee_status_id = 1
+  ORDER BY
+    emp.employee_id
+  LIMIT #{limit, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}
+</select>
+
+  <select id = "selectByEmployeeId" resultType="com.employee.managementapi.employee.EmployeeBasicProfile">
+  SELECT
+    emp.employee_id
+  , emp.employee_code
+  , emp.family_name 
+  , emp.last_name 
+  , emp.family_name_furigana
+  , emp.last_name_furigana
+  FROM
+    employee as emp
+  INNER JOIN
+    employee_status as es on es.employee_status_id = emp.employee_status_id 
+  AND
+    es.employee_status_id = 1
+  WHERE
+    emp.employee_id 
+    IN
+    <foreach item="employeeId" open="(" close=")" collection="employeeIds" separator=",">
+      #{employeeId.employeeId}
+    </foreach>
+  ORDER BY
+    emp.employee_id
+  </select>
+</mapper>

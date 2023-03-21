@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.skill.programming.DomainProgrammingSkillMapper">
+	<select id="selectEmployeeIdListByFilterList"
+	  resultType="java.lang.Integer">
+  SELECT
+     emp.employee_id     
+  FROM
+    employee_programming_skill as emp_program
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_program.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+    AND
+    es.employee_status_id = 1
+  WHERE
+   <foreach item="domainProgrammingSkill" collection="domainProgrammingSkills"
+      separator="OR">
+          emp_program.programming_skill_id = #{domainProgrammingSkill.programmingSkillId} AND emp_program.skill_level <![CDATA[>=]]> #{domainProgrammingSkill.skillLevel}
+  </foreach>
+  GROUP BY 
+   emp.employee_id 
+  HAVING
+   COUNT(*) = #{domainProgrammingSkillsSize}
+  ORDER BY
+    emp.employee_id
+     </select>
+
+
+<select id="selectListByEnployeeIdList" resultType="com.employee.managementapi.skill.programming.ProgrammingSkill" parameterType="com.employee.managementapi.employee.EmployeeId">
+  SELECT
+     prgram_skill.programming_skill_id
+    ,prgram_skill.programming_skill_name
+    ,emp_program.skill_level
+  FROM
+    employee_programming_skill as emp_program
+  INNER JOIN
+    programming_skill as prgram_skill on 
+    prgram_skill.programming_skill_id = emp_program.programming_skill_id
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_program.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+  AND
+    es.employee_status_id = 1
+  WHERE 
+    emp.employee_id 
+    IN
+    <foreach item="employeeId" open="(" close=")" collection="employeeIds" separator=",">
+    	#{employeeId.employeeId}
+    </foreach>
+  ORDER BY
+    emp.employee_id, prgram_skill.programming_skill_id
+</select>
+</mapper>

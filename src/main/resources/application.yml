@@ -1,0 +1,18 @@
+#ログファイルの場所
+logging:
+  file:
+    name: ./var/log/employee-management.log
+#メッセージファイル
+spring:
+  messages:
+    basename: messages
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  jackson:
+    default-property-inclusion: NON_EMPTY
+  profiles:
+    active: dev
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

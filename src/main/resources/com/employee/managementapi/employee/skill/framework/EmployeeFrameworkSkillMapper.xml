@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.employee.skill.framework.EmployeeFrameworkSkillMapper">
+	<select id="selectList" resultType="com.employee.managementapi.employee.skill.framework.EmployeeFrameworkSkill">
+		SELECT
+		emp.employee_id
+	   ,emp_framework.employee_framework_skill_id
+	   ,emp.employee_code
+	   ,framework_skill.framework_skill_name
+	   ,emp_framework.skill_level
+	 FROM
+	   employee_framework_skill as emp_framework
+	 INNER JOIN
+	   framework_skill on 
+	   framework_skill.framework_skill_id = emp_framework.framework_skill_id
+	 INNER JOIN 
+	   employee as emp on
+	   emp.employee_id = emp_framework.employee_id
+	 INNER JOIN
+	   employee_status as es on
+	   es.employee_status_id = emp.employee_status_id 
+	 AND
+	   es.employee_status_id = 1
+	 ORDER BY
+	   emp.employee_id, framework_skill.framework_skill_id
+	</select>
+</mapper>

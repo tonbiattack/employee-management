@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.employee.managementapi.skill.database.DomainDatabaseSkillMapper">
+	<select id="selectEmployeeIdListByFilterList"
+	  resultType="java.lang.Integer">
+  SELECT
+     emp.employee_id
+  FROM
+    employee_database_skill as emp_databaase
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_databaase.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+    AND
+    es.employee_status_id = 1
+  WHERE
+   <foreach item="domainDatabaseSkill" collection="domainDatabaseSkills"
+      separator="OR">
+          emp_databaase.database_skill_id = #{domainDatabaseSkill.databaseSkillId} AND emp_databaase.skill_level <![CDATA[>=]]> #{domainDatabaseSkill.skillLevel}
+  </foreach>
+  GROUP BY 
+   emp.employee_id 
+  HAVING
+   COUNT(*) = #{domainDatabaseSkillsSize}
+  ORDER BY
+    emp.employee_id
+     </select>
+
+
+<select id="selectListByEnployeeIdList" parameterType="com.employee.managementapi.employee.EmployeeId" resultType="com.employee.managementapi.skill.database.DatabaseSkill">
+  SELECT
+     database_skill.database_skill_id
+    ,database_skill.database_skill_name
+    ,emp_databaase.skill_level
+  FROM
+    employee_database_skill as emp_databaase
+  INNER JOIN
+    database_skill as database_skill on 
+    database_skill.database_skill_id = emp_databaase.database_skill_id
+  INNER JOIN 
+    employee as emp on
+    emp.employee_id = emp_databaase.employee_id
+  INNER JOIN
+    employee_status as es on
+    es.employee_status_id = emp.employee_status_id 
+  AND
+    es.employee_status_id = 1
+  WHERE 
+    emp.employee_id 
+    IN
+    <foreach item="employeeId" open="(" close=")" collection="employeeIds" separator=",">
+      #{employeeId.employeeId}
+    </foreach>
+  ORDER BY
+    emp.employee_id, database_skill.database_skill_id
+</select>
+</mapper>
