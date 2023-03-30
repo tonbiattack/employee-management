@@ -74,8 +74,8 @@ public class WebSecurityConfig {
 						.antMatchers("/swagger-ui/**").permitAll()
 						.antMatchers("/swagger-resources/**").permitAll()
 						.antMatchers("/swagger-ui.html").permitAll()
-						.antMatchers("/webjars/**").permitAll());
-		//						.anyRequest().authenticated());
+						.antMatchers("/webjars/**").permitAll()
+						.anyRequest().authenticated());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
