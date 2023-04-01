@@ -68,7 +68,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 						.antMatchers(HttpMethod.DELETE, "/api/v1/**").hasRole("ADMIN")
 						.antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-						.antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+						.antMatchers("/api/v1/auth/**").permitAll()
 						.antMatchers("/api/v1/employees/skills/search").permitAll()
 						.antMatchers("/v2/api-docs/**").permitAll()
 						.antMatchers("/swagger-ui/**").permitAll()
